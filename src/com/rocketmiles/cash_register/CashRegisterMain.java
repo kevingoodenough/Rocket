@@ -11,15 +11,17 @@ public class CashRegisterMain {
         Console console = System.console();
 
         System.out.println("Cash Register Ready");
-
+        //************ADD CHECKING FOR MAX INT************************************
         while (run) {
-            input = console.readLine();
+            input = console.readLine().toLowerCase();
             if (input.equals("show")) {
                 register.show();
             } else if (input.substring(0, 3).equals("put")) {
-                register.put(get5Ints(input, 4));
+                if(get5Ints(input) != null)
+                    register.put(get5Ints(input));
             } else if (input.substring(0, 4).equals("take")) {
-                register.take(get5Ints(input, 5));
+                if(get5Ints(input) != null)
+                    register.take(get5Ints(input));
             } else if (input.equals("change")) {
                 System.out.println("change");
             } else if (input.equals("quit")) {
@@ -30,15 +32,19 @@ public class CashRegisterMain {
         }
     }
 
-    private static int[] get5Ints(String input, int startingIndex) {
+    private static int[] get5Ints(String input) {
         try {
-            String[] values = input.substring(startingIndex,input.length()).split(" ");
-            if(values.length != 5) {
+            String[] values = input.split(" ");
+            //Index 0 of the values array will be the user entered command (ex. put, take)
+            //This index will not be used to populate the int[] to be returned
+            if(values.length != 6) {
                 System.out.println(">> exactly 5 values must be input");
+                System.out.println(">> example - put 2 4 6 8 10");
+                System.out.println(">> example - take 1 2 3 4 5");
             } else {
-                int[] nums = new int[values.length];
-                for(int i = 0; i<values.length; i++){
-                    nums[i] = Integer.parseInt(values[i]);
+                int[] nums = new int[values.length-1];
+                for(int i = 0; i<values.length-1; i++){
+                    nums[i] = Integer.parseInt(values[i+1]);
                 }
                 return nums;
 
