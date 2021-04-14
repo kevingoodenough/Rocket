@@ -52,6 +52,10 @@ public class CashRegister {
 
         changeFound = this.changeHelper(change, 0, amount);
 
+        //Change might not have been made on the first pass due to one too many 20 or 10 dollar bills.
+        //another pass with one less 20 and then one less 10 could potentially find an alternate method of change
+        //available using a 5 and some 2 dollar bills to make change for an odd number where 1 dollar bills weren't available
+
         //Try with one less twenty
         if (change.bills[0] > 0 && !changeFound) {
             change.bills[0]--;
