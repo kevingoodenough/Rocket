@@ -15,7 +15,7 @@ public class CashRegisterMain {
         while (run) {
             input = console.readLine().toLowerCase();
             if (input.equals("show")) {
-                register.show();
+                register.show(true);
             } else if (input.substring(0, 3).equals("put")) {
                 if(get5Ints(input) != null)
                     register.put(get5Ints(input));
@@ -26,6 +26,7 @@ public class CashRegisterMain {
                 System.out.println("change");
             } else if (input.equals("quit")) {
                 run = false;
+                System.out.println(">> Goodbye");
             } else {
                 System.out.println(">> Input not recognized.  Please enter show, put, take, change or quit.");
             }

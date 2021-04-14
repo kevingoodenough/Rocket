@@ -10,9 +10,12 @@ public class CashRegister {
 
     //Show - displays the amount of all bills in the register and the quantity of
     //twenty, ten, five, two, and one dollar bills respectively
-    void show() {
-        String out = "$";
-        out += total(this.bills);
+    void show(boolean showTotal) {
+        String out = "";
+        if(showTotal) {
+            out += "$";
+            out += total(this.bills);
+        }
         out = out + " " + bills[0] + " " + bills[1] + " " + bills[2] + " " + bills[3] + " " + bills[4];
         System.out.println(out);
     }
@@ -24,7 +27,7 @@ public class CashRegister {
         for(int i = 0; i <5; i++) {
             this.bills[i] += arr[i];
         }
-        this.show();
+        this.show(true);
     }
 
     //Takes the given quantities of bills from the register and subtracts them from the previous register total.
@@ -39,14 +42,95 @@ public class CashRegister {
             else
                 System.out.println(">> No " + dollarName(i) + " dollar bills will be taken as the requested amount is not available.");
         }
-        this.show();
+        this.show(true);
     }
 
+    //Attempts to make change in the given amount from the money available in this.bills
+    void change(int amount) {
+        CashRegister change = new CashRegister();
+        boolean changeFound = false;
 
+        for(int i=0; i<this.bills.length; i++) {
+            while((total(change.bills) < amount) && change.bills[i] < this.bills[i]) {
+                change.bills[i]++;
+            }
+            if(total(change.bills) == amount) {
+                System.out.print(">> Change made - ");
+                change.show(false);
+                System.out.print(">> Taking change from register.  New total - ");
+                this.take(change.bills);
+                changeFound = true;
+                break;
+            } else if(total(change.bills) > amount) {
+                change.bills[i]--;
+            }
+        }
 
-    //MAKE PRIVATE OR SOMETHING ELSE THAT CAN STILL BE ACCESSED BY TESTS
+        //Try with one less twenty
+        if (change.bills[0] > 0 && !changeFound) {
+            change.bills[0]--;
+            for(int i=1; i<this.bills.length; i++) {
+                while ((total(change.bills) < amount) && change.bills[i] < this.bills[i]) {
+                    change.bills[i]++;
+                }
+                if (total(change.bills) == amount) {
+                    System.out.print(">> Change made - ");
+                    change.show(false);
+                    System.out.print(">> Taking change from register.  New total - ");
+                    this.take(change.bills);
+                    changeFound = true;
+                    break;
+                } else if (total(change.bills) > amount) {
+                    change.bills[i]--;
+                }
+            }
+            change.bills[0]++;
+        }
+
+        //Try with one less ten
+        if (change.bills[1] > 0 && !changeFound) {
+            change.bills[1]--;
+            for(int i=2; i<this.bills.length; i++) {
+                while ((total(change.bills) < amount) && change.bills[i] < this.bills[i]) {
+                    change.bills[i]++;
+                }
+                if (total(change.bills) == amount) {
+                    System.out.print(">> Change made - ");
+                    change.show(false);
+                    System.out.print(">> Taking change from register.  New total - ");
+                    this.take(change.bills);
+                    changeFound = true;
+                    break;
+                } else if (total(change.bills) > amount) {
+                    change.bills[i]--;
+                }
+            }
+            change.bills[1]++;
+        }
+        if(!changeFound)
+            System.out.println(">> Sorry, change could not be made.");
+    }
+    /*
+    private changeHelper () {
+        for(int i=2; i<this.bills.length; i++) {
+            while ((total(change.bills) < amount) && change.bills[i] < this.bills[i]) {
+                change.bills[i]++;
+            }
+            if (total(change.bills) == amount) {
+                System.out.print(">> Change made - ");
+                change.show(false);
+                System.out.print(">> Taking change from register.  New total - ");
+                this.take(change.bills);
+                changeFound = true;
+                break;
+            } else if (total(change.bills) > amount) {
+                change.bills[i]--;
+            }
+        }
+    }
+*/
     //Calculates the total dollar amount in the register
-    int total(int[] arr) {
+    private int total(int[] arr) {
         int total = 0;
         total += arr[0] * 20;
         total += arr[1] * 10;
