@@ -50,7 +50,28 @@ public class CashRegister {
         CashRegister change = new CashRegister();
         boolean changeFound = false;
 
-        for(int i=0; i<this.bills.length; i++) {
+        changeFound = this.changeHelper(change, 0, amount);
+
+        //Try with one less twenty
+        if (change.bills[0] > 0 && !changeFound) {
+            change.bills[0]--;
+            changeFound = this.changeHelper(change, 1, amount);
+            change.bills[0]++;
+        }
+
+        //Try with one less ten
+        if (change.bills[1] > 0 && !changeFound) {
+            change.bills[1]--;
+            changeFound = this.changeHelper(change, 2, amount);
+            change.bills[1]++;
+        }
+
+        if(!changeFound)
+            System.out.println(">> Sorry, change could not be made.");
+    }
+
+    private boolean changeHelper (CashRegister change, int startIdx, int amount) {
+        for(int i=startIdx; i<this.bills.length; i++) {
             while((total(change.bills) < amount) && change.bills[i] < this.bills[i]) {
                 change.bills[i]++;
             }
@@ -59,76 +80,14 @@ public class CashRegister {
                 change.show(false);
                 System.out.print(">> Taking change from register.  New total - ");
                 this.take(change.bills);
-                changeFound = true;
-                break;
+                return true;
             } else if(total(change.bills) > amount) {
                 change.bills[i]--;
             }
         }
-
-        //Try with one less twenty
-        if (change.bills[0] > 0 && !changeFound) {
-            change.bills[0]--;
-            for(int i=1; i<this.bills.length; i++) {
-                while ((total(change.bills) < amount) && change.bills[i] < this.bills[i]) {
-                    change.bills[i]++;
-                }
-                if (total(change.bills) == amount) {
-                    System.out.print(">> Change made - ");
-                    change.show(false);
-                    System.out.print(">> Taking change from register.  New total - ");
-                    this.take(change.bills);
-                    changeFound = true;
-                    break;
-                } else if (total(change.bills) > amount) {
-                    change.bills[i]--;
-                }
-            }
-            change.bills[0]++;
-        }
-
-        //Try with one less ten
-        if (change.bills[1] > 0 && !changeFound) {
-            change.bills[1]--;
-            for(int i=2; i<this.bills.length; i++) {
-                while ((total(change.bills) < amount) && change.bills[i] < this.bills[i]) {
-                    change.bills[i]++;
-                }
-                if (total(change.bills) == amount) {
-                    System.out.print(">> Change made - ");
-                    change.show(false);
-                    System.out.print(">> Taking change from register.  New total - ");
-                    this.take(change.bills);
-                    changeFound = true;
-                    break;
-                } else if (total(change.bills) > amount) {
-                    change.bills[i]--;
-                }
-            }
-            change.bills[1]++;
-        }
-        if(!changeFound)
-            System.out.println(">> Sorry, change could not be made.");
+        return false;
     }
-    /*
-    private changeHelper () {
-        for(int i=2; i<this.bills.length; i++) {
-            while ((total(change.bills) < amount) && change.bills[i] < this.bills[i]) {
-                change.bills[i]++;
-            }
-            if (total(change.bills) == amount) {
-                System.out.print(">> Change made - ");
-                change.show(false);
-                System.out.print(">> Taking change from register.  New total - ");
-                this.take(change.bills);
-                changeFound = true;
-                break;
-            } else if (total(change.bills) > amount) {
-                change.bills[i]--;
-            }
-        }
-    }
-*/
+
     //Calculates the total dollar amount in the register
     private int total(int[] arr) {
         int total = 0;
