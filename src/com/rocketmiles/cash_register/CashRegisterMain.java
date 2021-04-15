@@ -14,17 +14,19 @@ public class CashRegisterMain {
         //************ADD CHECKING FOR MAX INT************************************
         while (run) {
             input = console.readLine().toLowerCase();
-            if (input.equals("show")) {
+            String[] inputArr = input.split(" ");
+
+            if (inputArr[0].equals("show")) {
                 register.show(true);
-            } else if (input.substring(0, 3).equals("put")) {
-                if(get5Ints(input) != null)
+            } else if (inputArr[0].equals("put")) {
+                if (get5Ints(input) != null)
                     register.put(get5Ints(input));
-            } else if (input.substring(0, 4).equals("take")) {
-                if(get5Ints(input) != null)
+            } else if (inputArr[0].equals("take")) {
+                if (get5Ints(input) != null)
                     register.take(get5Ints(input));
-            } else if (input.equals("change")) {
-                System.out.println("change");
-            } else if (input.equals("quit")) {
+            } else if (inputArr[0].equals("change")) {
+                register.change(Integer.parseInt(inputArr[1]));
+            } else if (inputArr[0].equals("quit")) {
                 run = false;
                 System.out.println(">> Goodbye");
             } else {

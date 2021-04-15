@@ -12,7 +12,7 @@ CashRegister should be run through the command line.  It includes the following 
 
 ## Installation
 
-Download and install to any location.  From the terminal within the main directory
+Download and install to any location.  From the terminal within the src directory, enter the following.
 
 ```bash
 java com.rocketmiles.cash_register.CashRegisterMain

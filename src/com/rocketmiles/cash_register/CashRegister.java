@@ -51,23 +51,29 @@ public class CashRegister {
         boolean changeFound = false;
 
         changeFound = this.changeHelper(change, 0, amount);
+        if(changeFound)
+            return;
 
-        //Change might not have been made on the first pass due to one too many 20 or 10 dollar bills.
-        //another pass with one less 20 and then one less 10 could potentially find an alternate method of change
-        //available using a 5 and some 2 dollar bills to make change for an odd number where 1 dollar bills weren't available
+        //Change might not have been made on the first pass due to one too many 20, 10, or 5 dollar bills.
+        //Running changeHelper will deducting one of each bill at a time to cover remaining options
 
-        //Try with one less twenty
-        if (change.bills[0] > 0 && !changeFound) {
-            change.bills[0]--;
+        for(int i=change.bills[0]; i>=0; i--) {
+            change.bills[0] = i;
             changeFound = this.changeHelper(change, 1, amount);
-            change.bills[0]++;
-        }
-
-        //Try with one less ten
-        if (change.bills[1] > 0 && !changeFound) {
-            change.bills[1]--;
-            changeFound = this.changeHelper(change, 2, amount);
-            change.bills[1]++;
+            if(changeFound)
+                return;
+            for(int j=change.bills[1]; j>=0; j--) {
+                change.bills[1] = j;
+                changeFound = this.changeHelper(change, 2, amount);
+                if(changeFound)
+                    return;
+                for(int k=change.bills[2]; k>=0; k--) {
+                    change.bills[2] = k;
+                    changeFound = this.changeHelper(change, 3, amount);
+                    if(changeFound)
+                    return;
+                }
+            }
         }
 
         if(!changeFound)
@@ -79,6 +85,7 @@ public class CashRegister {
             while((total(change.bills) < amount) && change.bills[i] < this.bills[i]) {
                 change.bills[i]++;
             }
+            change.show(true);
             if(total(change.bills) == amount) {
                 System.out.print(">> Change made - ");
                 change.show(false);
