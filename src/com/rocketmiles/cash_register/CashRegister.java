@@ -4,7 +4,7 @@ public class CashRegister {
     private int[] bills;
 
     //Constructor
-    public CashRegister() {
+    CashRegister() {
         bills = new int[] {0, 0, 0, 0, 0};
     }
 
@@ -55,8 +55,7 @@ public class CashRegister {
             return;
 
         //Change might not have been made on the first pass due to one too many 20, 10, or 5 dollar bills.
-        //Running changeHelper will deducting one of each bill at a time to cover remaining options
-
+        //Running changeHelper while deducting one of each bill at a time to cover the remaining options
         for(int i=change.bills[0]; i>=0; i--) {
             change.bills[0] = i;
             changeFound = this.changeHelper(change, 1, amount);
@@ -85,7 +84,6 @@ public class CashRegister {
             while((total(change.bills) < amount) && change.bills[i] < this.bills[i]) {
                 change.bills[i]++;
             }
-            change.show(true);
             if(total(change.bills) == amount) {
                 System.out.print(">> Change made - ");
                 change.show(false);

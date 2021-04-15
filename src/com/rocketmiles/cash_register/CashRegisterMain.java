@@ -11,9 +11,12 @@ public class CashRegisterMain {
         Console console = System.console();
 
         System.out.println("Cash Register Ready");
-        //************ADD CHECKING FOR MAX INT************************************
+
+        //Continue to loop until "quit" command sets run to false
         while (run) {
             input = console.readLine().toLowerCase();
+            //Divide user input into an array with the first index being the command and index 1-5
+            //are potential numeric values needed
             String[] inputArr = input.split(" ");
 
             if (inputArr[0].equals("show")) {
@@ -25,7 +28,10 @@ public class CashRegisterMain {
                 if (get5Ints(input) != null)
                     register.take(get5Ints(input));
             } else if (inputArr[0].equals("change")) {
-                register.change(Integer.parseInt(inputArr[1]));
+                if(inputArr.length > 2)
+                    System.out.println(">> Please only input 1 value to make change");
+                else
+                    register.change(Integer.parseInt(inputArr[1]));
             } else if (inputArr[0].equals("quit")) {
                 run = false;
                 System.out.println(">> Goodbye");
@@ -35,6 +41,7 @@ public class CashRegisterMain {
         }
     }
 
+    //get5Ints converts index 1-5 of a string array into an int array
     private static int[] get5Ints(String input) {
         try {
             String[] values = input.split(" ");
